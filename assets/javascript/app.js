@@ -3,6 +3,9 @@
 var clockRunning = false;
 var intervalId;
 var clock = 30;
+var correctAnswerCount = 0;
+var wrongAnswerCount = 0;
+var unansweredCount = 10;
 
 $("#start-button").click(function() {
     $("#start-button").hide();
@@ -10,9 +13,7 @@ $("#start-button").click(function() {
 });
 
 var gameStart = function () {
-    var correctAnswerCount = 0;
-    var wrongAnswerCount = 0;
-    var questionNum = 1;
+
     questionFunc();
     gameTimer();
 
@@ -30,6 +31,9 @@ var gameTimer = function() {
 var countdown = function() {
     $("#timer").html("Time Remaining: " + clock + " seconds");
     clock--;
+    if (clock === 0) {
+        endgame();
+    }
 }
 //each question should be written to html from a function
 
@@ -50,6 +54,7 @@ var questionFunc = function() {
         
             var answerLi = $("<li>");
             answerLi.addClass("answerFormat");
+            answerLi.attr("data-value", i);
             answerLi.text(questions[q].answers[i]);
             answerUl.append(answerLi);
         
@@ -119,6 +124,7 @@ var questions = {
     },
     
 }
+
 // answer key in an array
 var answerKey = ["3", "1", "2", "4", "2", "3", "2", "4", "1", "1"];
 
@@ -126,4 +132,28 @@ var answerKey = ["3", "1", "2", "4", "2", "3", "2", "4", "1", "1"];
 
 //a different function will determine the clicked answer and count the user's score in the background
 
+
+
 //final function to show the user's score
+var endgame = function() {
+    $("#timer").empty();
+    $("#questions").empty();
+
+    var correct = $("<div>");
+    correct.html("Correct answers: " + correctAnswerCount);
+
+    var wrong = $("<div>");
+    wrong.html("Incorrect answers: " + wrongAnswerCount);
+
+
+    var unanswered = $("<div>");
+    unanswered.html("Unanswered questions: " + unansweredCount);
+
+    $(wrong).append(unanswered);
+    $(correct).append(wrong);
+
+    var results = $("<div>");
+    $(results).append(correct);
+
+    $("#questions").append(results);
+}
