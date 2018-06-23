@@ -1,9 +1,8 @@
 //needs to have a function to start the game and resets all game variables
 
-
-
-
-
+var clockRunning = false;
+var intervalId;
+var clock = 30;
 
 $("#start-button").click(function() {
     $("#start-button").hide();
@@ -15,32 +14,54 @@ var gameStart = function () {
     var wrongAnswerCount = 0;
     var questionNum = 1;
     questionFunc();
+    gameTimer();
 
 };
 
+//create game timer
+
+var gameTimer = function() {
+    
+    if (!clockRunning) {
+        intervalId = setInterval(countdown, 1000);
+    }
+}
+
+var countdown = function() {
+    $("#timer").html("Time Remaining: " + clock + " seconds");
+    clock--;
+}
 //each question should be written to html from a function
 
 var questionFunc = function() {
 
-    var questionDiv = $("<div>");
-    questionDiv.addClass("questionFormat");
-
-    var answerUl = $("<ul>");
-
-    var answerLi = $("<li>");
-    answerLi.addClass("answerFormat");
-
     //loop through the object and display the questions/options
     for (q in questions){
 
-        questionDiv.text(questions[q]);
-        answerLi.text(answers[q]);
+        var questionDiv = $("<div>");
+        questionDiv.addClass("questionFormat");
+        questionDiv.text(questions[q].question);
+    
+        var answerUl = $("<ul>");
         
-        $("#questions").append(questionDiv);
-        $("#answers").append(answerLi);
+        // create a second loop that will grab the array answers for each question and append to the ul
+
+        for (var i = 0; i < questions[q].answers.length; i++) {
         
-        console.log(questions[q].question);
-        console.log(questions[q].answers);
+            var answerLi = $("<li>");
+            answerLi.addClass("answerFormat");
+            answerLi.text(questions[q].answers[i]);
+            answerUl.append(answerLi);
+        
+        }
+        
+        questionDiv.append(answerUl);
+        $("#question").append(questionDiv);
+
+        
+        // console.log(questions[q].question);
+        // console.log(questions[q].answers);
+        
     }
 };
 
@@ -105,4 +126,4 @@ var answerKey = ["3", "1", "2", "4", "2", "3", "2", "4", "1", "1"];
 
 //a different function will determine the clicked answer and count the user's score in the background
 
-
+//final function to show the user's score
