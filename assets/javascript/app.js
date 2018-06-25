@@ -153,6 +153,7 @@ var endgame = function() {
     $(correct).append(wrong);
 
     var results = $("<div>");
+    results.html("All Done!");
     $(results).append(correct);
 
     $("#questions").append(results);
